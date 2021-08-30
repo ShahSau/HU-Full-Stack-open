@@ -17,14 +17,24 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const change = () => {
     setSelected(Math.floor(Math.random() * 6));
+    console.log(vote);
+  };
+  const [vote, setVote] = useState(
+    new Array(6 + 1).join("0").split("").map(parseFloat)
+  );
+  const vote_change = () => {
+    const copy = [...vote];
+    copy[selected] += 1;
+    setVote(copy);
   };
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>
-        <Button func={change} text={"next anecdotes"} />
-      </p>
+      {anecdotes[selected]}
+      <br></br>
+      has {vote[selected]} votes <br></br>
+      <Button func={vote_change} text={"vote"} />
+      <Button func={change} text={"next anecdotes"} />
     </div>
   );
 };

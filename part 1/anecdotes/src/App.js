@@ -17,24 +17,31 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const change = () => {
     setSelected(Math.floor(Math.random() * 6));
-    console.log(vote);
   };
   const [vote, setVote] = useState(
     new Array(6 + 1).join("0").split("").map(parseFloat)
   );
+
+  const x = vote.indexOf(Math.max(...vote));
+  console.log(x);
   const vote_change = () => {
     const copy = [...vote];
     copy[selected] += 1;
     setVote(copy);
+    console.log(vote);
   };
 
   return (
     <div>
+      <h1>Anecdotes of the day</h1>
       {anecdotes[selected]}
       <br></br>
       has {vote[selected]} votes <br></br>
       <Button func={vote_change} text={"vote"} />
       <Button func={change} text={"next anecdotes"} />
+      <h1>Anecdotes with most vote</h1>
+      {anecdotes[x]}
+      <br></br>
     </div>
   );
 };

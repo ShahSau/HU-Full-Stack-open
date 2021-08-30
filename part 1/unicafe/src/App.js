@@ -19,6 +19,9 @@ const App = () => {
 
   // creating statistics component
   const Statistics = (props) => {
+    if (props.good + props.bad + props.neutral === 0) {
+      return <p>No feedback given</p>;
+    }
     return (
       <div>
         <h2>statistics</h2>

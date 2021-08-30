@@ -6,6 +6,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  //Button
+  const Button = ({ func, text }) => {
+    return <button onClick={func}>{text}</button>;
+  };
   //creating event handlers
   const increaseGood = () => {
     setGood(good + 1);
@@ -17,35 +21,43 @@ const App = () => {
     setNeutral(neutral + 1);
   };
 
+  // single statistic line
+  const StatisticLine = ({ text, value }) => {
+    return (
+      <p>
+        {text} {value}{" "}
+      </p>
+    );
+  };
   // creating statistics component
-  const Statistics = (props) => {
-    if (props.good + props.bad + props.neutral === 0) {
+  const Statistics = ({ good, bad, neutral }) => {
+    if (good + bad + neutral === 0) {
       return <p>No feedback given</p>;
     }
     return (
       <div>
         <h2>statistics</h2>
-        <p>good {props.good}</p>
-        <p>neutral {props.neutral}</p>
-        <p>bad {props.bad}</p>
-        <p>all {props.good + props.bad + props.neutral}</p>
-        <p>
-          average{" "}
-          {(props.good - props.bad) / (props.good + props.bad + props.neutral)}
-        </p>
-        <p>
-          positive{" "}
-          {(props.good / (props.good + props.bad + props.neutral)) * 100}%
-        </p>
+        <StatisticLine text={"good"} value={good} />
+        <StatisticLine text={"neutral"} value={neutral} />
+        <StatisticLine text={"bad"} value={bad} />
+        <StatisticLine text={"all"} value={good + bad + neutral} />
+        <StatisticLine
+          text={"average"}
+          value={(good - bad) / (good + bad + neutral)}
+        />
+        <StatisticLine
+          text={"positive"}
+          value={(good / (good + bad + neutral)) * 100}
+        />
       </div>
     );
   };
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => increaseGood()}>good</button>
-      <button onClick={() => increaseNeutral()}>neutral</button>
-      <button onClick={() => increaseBad()}>bad</button>
+      <Button func={increaseGood} text={"good"} />
+      <Button func={increaseNeutral} text={"neutral"} />
+      <Button func={increaseBad} text={"bad"} />
       <Statistics good={good} bad={bad} neutral={neutral} />
     </div>
   );

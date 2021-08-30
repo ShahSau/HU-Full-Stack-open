@@ -1,65 +1,42 @@
-import React from "react";
+import React from 'react'
 
-const App = () => {
-  const course = "Half Stack application development";
-  const parts = [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
-  ];
-
-  //Header component
-  const Header = (props) => {
-    return <h1>{props.course}</h1>;
-  };
-  //part component
-  const Part = (props) => {
-    return (
-      <p>
-        {props.part} {props.exercise}
-      </p>
-    );
-  };
-
-  //Content component
-  const Content = (props) => {
-    return (
-      <div>
-        <Part part={props.parts[0].name} exercise={props.parts[0].exercises} />
-        <Part part={props.parts[1].name} exercise={props.parts[1].exercises} />
-        <Part part={props.parts[2].name} exercise={props.parts[2].exercises} />
-      </div>
-    );
-  };
-
-  //Total component
-  const Total = (props) => {
-    return (
-      <p>
-        Number of exercises{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
-    );
-  };
-
-  return (
+const Course = ({course})=>{
+  return(
     <div>
-      <Header course={course} />
-      <Content parts={parts} />
-      <Total parts={parts} />
-    </div>
-  );
-};
+      <h2>{course.name}</h2>
+        {course.parts.map(item => 
+          
+          <p key={item.id}>{item.name} {item.exercises}</p>
+          
+)}
 
+      
+    </div>
+  )
+}
+const App = () => {
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
+
+  return <Course course={course} />
+}
 export default App;

@@ -1,10 +1,10 @@
 import React from "react";
 
 const Course = ({ course }) => {
-  let total = 0;
-  course.parts.map((item) => {
-    return (total += item.exercises);
-  });
+  // let total = 0;
+  // course.parts.map((item) => {
+  //   return (total += item.exercises);
+  // });
   return (
     <div>
       <h2>{course.name}</h2>
@@ -13,9 +13,9 @@ const Course = ({ course }) => {
           {item.name} {item.exercises}
         </p>
       ))}
-      <p key={Math.random()}>
+      {/* <p key={Math.random()}>
         <strong>total of {total} exercise</strong>
-      </p>
+      </p> */}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import axios from "axios";
 import Country from "./components/Country";
 import Search from "./components/Search";
 import Results from "./components/Results";
+import Weather from "./components/Weather";
 
 const App = () => {
   // creating hooks to list countries and search countries and results
@@ -75,6 +76,9 @@ const App = () => {
             language={country.languages.map((country) => country.name)}
           />
         ))}
+        {filter_country.map(country =>
+    <Weather key={Math.random()} city={country.capital}/>
+    )}
       </div>
     );
   }

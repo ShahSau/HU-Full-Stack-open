@@ -4,7 +4,6 @@ import Filter from "./components/Filter";
 import Person from "./components/Person";
 import PersonForm from "./components/PersonForm";
 const App = () => {
-  const [persons, setPersons] = useState([]);
 
   useEffect(() => {
     axios
@@ -14,6 +13,16 @@ const App = () => {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  // creating person hook
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ]) 
+
+
   // creating states for name, number and search
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -48,7 +57,11 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    setPersons(persons.concat(newObj));
+    axios
+    .post('http://localhost:3001/persons', newObj)
+    .then(response=>
+      setPersons(persons.concat(response.data))
+      )
     setNewName("");
     setNewNumber("");
   };

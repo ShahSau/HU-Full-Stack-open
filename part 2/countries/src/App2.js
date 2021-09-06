@@ -5,60 +5,61 @@ import Search from "./components/Search";
 import Results from "./components/Results";
 
 const App = () => {
-  // creating hooks to list countries and search countries and results
-  const [listCountry, setListCountry] = useState([]);
-  const [search, setSearchs] = useState("");
-  const [showResults, setShowResults] = useState([]);
-
-  /// using axios to fetch data
+  let country = "";
   useEffect(() => {
     axios
       .get("https://restcountries.eu/rest/v2/all")
       .then((response) => {
         setListCountry(response.data);
-        // console.log(listCountry);
+        console.log(listCountry);
       })
       .catch((error) => console.log(error));
-  }, []);
-
-  // creating updateseacrch function
+  }, [listCountry]);
+  const [listCountry, setListCountry] = useState([]);
+  const [search, setSearchs] = useState("");
+  const [country22, setCountry22] = useState(true);
   const updateSearch = (event) => {
     setSearchs(event.target.value);
   };
-
-  //filtering countries
   let filter_country = listCountry.filter(
     (person) => person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
   );
+  const [showResults, setShowResults] = useState([]);
 
-  // creating a function to show details of the countries
-  const onClickDetails = (event) => {
-    let country = filter_country.filter((c) => c.name === event.name)[0];
+  const onClick2 = (event) => {
+    country = filter_country.filter((c) => c.name === event.name)[0];
+    console.log(event.name);
+    console.log(country);
 
     setShowResults([country]);
   };
 
-  //rendering countries list depending on the filter data
-  if (filter_country.length > 10) {
+  if (filter_country.length > 3) {
+    setCountry22(false);
     return (
       <div>
         <Search search={search} updateSearch={updateSearch} />
         <p>too many matches</p>
       </div>
     );
-  } else if (filter_country.length <= 10 && filter_country.length > 1) {
+  } else if (filter_country.length > 1 && filter_country.length <= 3) {
+    console.log(filter_country);
+    console.log(showResults);
+    setCountry22(false);
+    country = "";
+
     return (
       <div>
         <Search search={search} updateSearch={updateSearch} />
         {filter_country.map((country) => (
           <p key={Math.random()} id={country.name}>
             {country.name}{" "}
-            <button onClick={() => onClickDetails(country)}>Button </button>
+            <button onClick={() => onClick2(country)}>Button </button>
           </p>
         ))}
-        {showResults.map((c) => (
-          <Results key={Math.random()} country={c} />
-        ))}
+
+        {/* {country22 &&
+          showResults.map((c) => <Results key={Math.random()} country={c} />)} */}
       </div>
     );
   } else {

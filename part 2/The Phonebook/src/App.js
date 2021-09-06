@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import Person from "./components/Person";
 import PersonForm from "./components/PersonForm";
-import personService from './services/Persons'
+import personService from "./services/Persons"
+import Success from "./components/Success"
 const App = () => {
 
   useEffect(() => {
@@ -28,6 +29,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearchs] = useState("");
+
+  //Creating success hook
+  const[ successMessage, setSuccessMessage] = useState(null)
+
 
   const name_array = persons.map((person) => person.name);
 
@@ -65,6 +70,10 @@ const App = () => {
         .then(new_data=>{
           setPersons(persons.map(person=> person.id!==already_name.id ? person : new_data))
         })
+        setSuccessMessage(`Added ${newName}`)
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          },5000)
         setNewName('')
         setNewNumber('')
       }else{
@@ -79,6 +88,10 @@ const App = () => {
     .then(newPerson=>
       setPersons(persons.concat(newPerson))
       )
+      setSuccessMessage(`Added ${newName}`)
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          },5000)
     setNewName("")
     setNewNumber("")
   };
@@ -103,7 +116,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-
+      <Success message={successMessage}/>
       <Filter
         text={"filter shown with"}
         search={search}

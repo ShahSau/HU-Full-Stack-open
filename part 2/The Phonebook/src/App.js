@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import Person from "./components/Person";
 import PersonForm from "./components/PersonForm";
@@ -7,13 +6,14 @@ import personService from './services/Persons'
 const App = () => {
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((res) => {
-        setPersons(res.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    console.log('effect')
+    personService 
+    .getAll()
+    .then(allPersons=>
+      setPersons(allPersons))
+    .catch(error => console.log(error));
+      
+  }, [])
 
   // creating person hook
   const [ persons, setPersons ] = useState([
@@ -66,6 +66,18 @@ const App = () => {
     setNewName("")
     setNewNumber("")
   };
+  //creating a function for delete person
+  const deletePerson =(event)=>{
+    if (window.confirm(`Are you sure, you want to delete ${event.name}`)) {
+      console.log('it works!!!');
+      personService
+      .deletePersons(event.id)
+      let filter_persons2 = filter_persons.filter(person=> person.id !== event.id)
+      setPersons(filter_persons2)
+
+    }
+    console.log(persons)
+  }
 
   let filter_persons = persons.filter(
     (person) => person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
@@ -94,7 +106,7 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {filter_persons.map((person) => (
-        <Person key={Math.random()} name={person.name} number={person.number} />
+        <Person key={Math.random()} name={person.name} number={person.number} onClick={()=>deletePerson(person)}/>
       ))}
     </div>
   );

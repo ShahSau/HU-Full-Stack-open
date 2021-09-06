@@ -33,12 +33,9 @@ const App = () => {
 
   // event handler for adding name
   const handleNewName = (event) => {
-    if (name_array.includes(event.target.value)) {
-      alert(`${event.target.value} is already added to phonebook`);
-    } else {
       setNewName(event.target.value);
     }
-  };
+
 
   // event handler for adding number
   const handleNewNumber = (event) => {
@@ -58,6 +55,25 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+    if (name_array.includes(newName)){
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+        const already_name =persons.find(name=>name.name === newName)
+        const new_Obj = {...already_name, number : newNumber}
+        console.log(already_name.id)
+        personService
+        .update(already_name.id, new_Obj)
+        .then(new_data=>{
+          setPersons(persons.map(person=> person.id!==already_name.id ? person : new_data))
+        })
+        setNewName('')
+        setNewNumber('')
+      }else{
+        setNewName('')
+        setNewNumber('')
+      }
+
+    }
+    else{ 
     personService
     .create(newObj)
     .then(newPerson=>
@@ -66,6 +82,7 @@ const App = () => {
     setNewName("")
     setNewNumber("")
   };
+}
   //creating a function for delete person
   const deletePerson =(event)=>{
     if (window.confirm(`Are you sure, you want to delete ${event.name}`)) {

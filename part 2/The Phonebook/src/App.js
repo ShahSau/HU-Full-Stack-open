@@ -4,6 +4,7 @@ import Person from "./components/Person";
 import PersonForm from "./components/PersonForm";
 import personService from "./services/Persons"
 import Success from "./components/Success"
+import ErrorMessage from "./components/ErrorMessage"
 const App = () => {
 
   useEffect(() => {
@@ -32,7 +33,8 @@ const App = () => {
 
   //Creating success hook
   const[ successMessage, setSuccessMessage] = useState(null)
-
+ //creating error hook
+ const[ errorMessage, setErrorMessage] = useState(null)
 
   const name_array = persons.map((person) => person.name);
 
@@ -69,16 +71,26 @@ const App = () => {
         .update(already_name.id, new_Obj)
         .then(new_data=>{
           setPersons(persons.map(person=> person.id!==already_name.id ? person : new_data))
-        })
-        setSuccessMessage(`Added ${newName}`)
+          setSuccessMessage(`Added ${newName}`)
           setTimeout(()=>{
             setSuccessMessage(null)
           },5000)
-        setNewName('')
-        setNewNumber('')
+        })
+        .catch(error=>{
+          console.log(error)
+          setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(()=>{
+              setErrorMessage(null)
+              setNewName(newName)
+              setNewNumber("-")
+            },5000)
+            setPersons(persons.filter(person=> person.id!== already_name.id ))
+        })
+        setNewName("")
+        setNewNumber("")
       }else{
-        setNewName('')
-        setNewNumber('')
+        setNewName("")
+        setNewNumber("")
       }
 
     }
@@ -117,6 +129,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Success message={successMessage}/>
+      <ErrorMessage message={errorMessage}/> 
       <Filter
         text={"filter shown with"}
         search={search}

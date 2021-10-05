@@ -24,8 +24,13 @@ test("blogs are returned as json", async () => {
 test("all notes are returned", async () => {
   const response = await api.get("/api/blogs");
   expect(response.body).toHaveLength(helper.blogs.length);
-},10000000);
+});
 
+test("the unique identifier property of the blog posts is named id", async () => {
+  const response = await api.get("/api/blogs");
+  const contents = response.body[0].id;
+  expect(contents).toBeDefined();
+})
 
 afterAll(() => {
     mongoose.connection.close();

@@ -53,6 +53,24 @@ test("successfully creates a new blog post", async () => {
   expect(title).toContain("Type of wars");
 });
 
+test("like value will be zero", async () => {
+  const newBlog = {
+    title: "Type of wars part 2",
+    author: "Robert C. Martin Sr.",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeofWarspart2.html",
+    __v: 0,
+  };
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogAtEnd = await helper.blogInDb();
+  const value = blogAtEnd[helper.blogs.length].likes;
+  expect(value).toEqual(0);
+});
+
 
 afterAll(() => {
     mongoose.connection.close();

@@ -73,6 +73,7 @@ const blogs = [
     }  
 ];
 
+// total likes
 describe("total likes", () => {
     test("of the empty list is zero", () => {
         const result = listHelper.totalLikes(listWithZeroBlog);
@@ -89,6 +90,7 @@ describe("total likes", () => {
   });
 });
 
+// favoutite blog
 describe("favoutite blog", () => {
     test("when list has more blogs,most liked blog is", () => {
       const result = listHelper.favoriteBlog(blogs);
@@ -110,6 +112,7 @@ describe("favoutite blog", () => {
     });
 });
 
+// author with most blogs
 describe("most blog", () => {
     test("when list has more blogs, favourite author is", () => {
       const result_fav = listHelper.mostBlogs(blogs);
@@ -124,6 +127,26 @@ describe("most blog", () => {
       expected_fav = {
         author: "Edsger W. Dijkstra",
         blogs: 1,
+      };
+      expect(result_fav).toEqual(expected_fav);
+    });
+});
+
+// author with most likes
+describe("most likes", () => {
+    test("when list has more blogs, author with most like is", () => {
+      const result_fav = listHelper.mostLikes(blogs);
+      expected_fav = {
+        author: "Edsger W. Dijkstra",
+        likes: 17,
+      };
+      expect(result_fav).toEqual(expected_fav);
+    });
+    test("when list has one blog, author with most like is the author of that blog", () => {
+      const result_fav = listHelper.mostLikes(listWithOneBlog);
+      expected_fav = {
+        author: "Edsger W. Dijkstra",
+        likes: 5,
       };
       expect(result_fav).toEqual(expected_fav);
     });

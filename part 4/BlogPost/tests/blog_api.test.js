@@ -86,6 +86,21 @@ test("title and url are missing returns 400", async () => {
 });
 
 
+test("deleating a single blog", async()=>{
+  const blogAtStart = await helper.blogInDb();
+  const blogToDelete = blogAtStart[0];
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204);
+
+    const blogsAtEnd = await helper.blogInDb();
+    expect(blogsAtEnd).toHaveLength(helper.blogs.length - 1);
+    const contents = blogsAtEnd.map((n) => n.title);
+    expect(contents).not.toContain(blogToDelete.title);
+})
+
+
 afterAll(() => {
     mongoose.connection.close();
   });

@@ -32,6 +32,28 @@ test("the unique identifier property of the blog posts is named id", async () =>
   expect(contents).toBeDefined();
 })
 
+
+test("successfully creates a new blog post", async () => {
+  const newBlog = {
+    title: "Type of wars",
+    author: "Robert C. Martin Jr.",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeofWars.html",
+    likes: 20,
+    __v: 0,
+  };
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogAtEnd = await helper.blogInDb();
+  expect(blogAtEnd).toHaveLength(helper.blogs.length + 1);
+  const title = blogAtEnd.map((blog) => blog.title);
+  expect(title).toContain("Type of wars");
+});
+
+
 afterAll(() => {
     mongoose.connection.close();
   });

@@ -71,6 +71,20 @@ test("like value will be zero", async () => {
   expect(value).toEqual(0);
 });
 
+test("title and url are missing returns 400", async () => {
+  const newBlog = {
+    author: "Robert C. Martin Sr.",
+    __v: 0,
+  };
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+
+  const blogAtEnd = await helper.blogInDb();
+  expect(blogAtEnd).toHaveLength(helper.blogs.length);
+});
+
 
 afterAll(() => {
     mongoose.connection.close();

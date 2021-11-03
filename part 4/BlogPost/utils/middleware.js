@@ -38,9 +38,9 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = (request, response, next) => {
   const decoded = jwt.decode(request.token);
-  if(decoded !== null){
+  if (decoded !== null) {
     request.user = decoded.username;
-    console.log(`user is: ${request.user}`)
+    console.log(`user is: ${request.user}`);
   }
 
   next();

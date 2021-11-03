@@ -1,10 +1,14 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {username:1, name:1, id:1});
+  const blogs = await Blog.find({}).populate("user", {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
   response.json(blogs.map((blog) => blog.toJSON()));
 });
 
@@ -23,12 +27,12 @@ blogsRouter.post("/", async (request, response) => {
   if (body.title === undefined && body.url === undefined) {
     response.status(400).end();
   } else {
-    
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if(!request.token || !decodedToken.id){
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    console.log(decodedToken.id);
+    if (!request.token || !decodedToken.id) {
       return response.status(401).json({
-        error: "token missing or invalid"
-      })
+        error: "token missing or invalid",
+      });
     }
     const user = await User.findById(decodedToken.id);
     const blog = new Blog({
@@ -60,8 +64,25 @@ blogsRouter.put("/:id", async (request, response) => {
 });
 
 blogsRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
+  const blog = await Blog.findById(request.params.id);
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  console.log(`user ${typeof blog.user.toString()}`);
+  console.log(`decoded ${typeof decodedToken.id.toString()}`);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({
+      error: "token missing or invalid",
+    });
+  }else {
+    if (blog.user.toString() === decodedToken.id.toString()) {
+    await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } else {
+    return response.status(401).json({
+      error: "unauthorized",
+    });
+  }
+}
+  // response.status(204).end();
 });
 
 module.exports = blogsRouter;

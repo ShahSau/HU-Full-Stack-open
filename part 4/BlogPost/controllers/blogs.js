@@ -23,6 +23,7 @@ blogsRouter.get("/:id", async (request, response) => {
 });
 
 blogsRouter.post("/", async (request, response) => {
+  const user = request.user;
   const body = request.body;
   if (body.title === undefined && body.url === undefined) {
     response.status(400).end();
@@ -64,24 +65,29 @@ blogsRouter.put("/:id", async (request, response) => {
 });
 
 blogsRouter.delete("/:id", async (request, response) => {
+  const user = request.user;
   const blog = await Blog.findById(request.params.id);
+  if (blog === null) {
+    return response.status(404).json({
+      erroe: "resource not found",
+    });
+  }
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  console.log(`user ${typeof blog.user.toString()}`);
-  console.log(`decoded ${typeof decodedToken.id.toString()}`);
+
   if (!request.token || !decodedToken.id) {
     return response.status(401).json({
       error: "token missing or invalid",
     });
-  }else {
-    if (blog.user.toString() === decodedToken.id.toString()) {
-    await Blog.findByIdAndRemove(request.params.id);
-    response.status(204).end();
   } else {
-    return response.status(401).json({
-      error: "unauthorized",
-    });
+    if (blog.user.toString() === decodedToken.id.toString()) {
+      await Blog.findByIdAndRemove(request.params.id);
+      response.status(204).end();
+    } else {
+      return response.status(401).json({
+        error: "unauthorized",
+      });
+    }
   }
-}
   // response.status(204).end();
 });
 

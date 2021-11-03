@@ -1,16 +1,19 @@
-const mongoose = require("mongoose");
 const { toString } = require("lodash");
+const mongoose = require("mongoose");
+
 const blogSchema = new mongoose.Schema({
   title: {
-    type: String
+    type: String,
   },
-  author: String,
+  author: {
+    type: String,
+  },
   url: {
-    type: String
+    type: String,
   },
-  likes: { 
+  likes: {
     type: Number,
-     default: 0 
+    default: 0,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,

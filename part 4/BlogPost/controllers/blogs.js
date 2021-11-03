@@ -1,34 +1,41 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
-blogsRouter.get("/", async(request, response,next) => {
-  const blogs = await Blog.find({})
-  try{
-    response.json(blogs.map(blog=> blog.toJSON()))
-  }catch(exception){
-    next(exception)
+blogsRouter.get("/", async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', {username:1, name:1, id:1});
+  response.json(blogs.map((blog) => blog.toJSON()));
+});
+
+blogsRouter.get("/:id", async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+
+  if (blog) {
+    response.json(blog);
+  } else {
+    response.status(404).end();
   }
 });
 
-blogsRouter.post("/", async (request, response,next) => {
-  const blog = new Blog(request.body);
-  if(blog.title === undefined && blog.url === undefined){
-    response.status(400).end()
-  }else{
-  try{
-    const result = await blog.save()
+blogsRouter.post("/", async (request, response) => {
+  const body = request.body;
+  if (body.title === undefined && body.url === undefined) {
+    response.status(400).end();
+  } else {
+    const user = await User.findById(body.userId);
+    const blog = new Blog({
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+      user: user._id,
+    });
+    const result = await blog.save();
+    user.blogs = user.blogs.concat(result._id);
+    await user.save();
     response.status(201).json(result);
-  }catch(exception){
-    next(exception)
   }
-}
 });
-
-blogsRouter.delete("/:id", async(request,response)=>{
-  await Blog.findByIdAndRemove(request.params.id)
-      response.status(204).end();
-})
-
 
 blogsRouter.put("/:id", async (request, response) => {
   const body = request.body;
@@ -44,6 +51,9 @@ blogsRouter.put("/:id", async (request, response) => {
   response.json(updatedBlog);
 });
 
-
+blogsRouter.delete("/:id", async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id);
+  response.status(204).end();
+});
 
 module.exports = blogsRouter;

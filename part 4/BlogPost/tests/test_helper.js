@@ -1,5 +1,5 @@
 const Blog = require('../models/blog')
-
+const User = require('../models/user')
 const blogs = [
     {
       _id: "5a422a851b54a676234d17f7",
@@ -55,12 +55,29 @@ const blogs = [
   ];
 
 
-
-const blogInDb = async () =>{
-    const blogs = await Blog.find({})
-    return blogs.map(r => r.toJSON())
-}
-
-module.exports ={
-    blogs, blogInDb
-}
+  const blogInDb = async () => {
+    const blogs = await Blog.find({});
+    return blogs.map((r) => r.toJSON());
+  };
+  const nonExistingId = async () => {
+    const blog = new Blog({
+      title: "TDD harms architecture",
+      author: "Robert C. Martin",
+      url:
+        "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+      likes: 0,
+    });
+    await blog.save();
+    await blog.remove();
+    return blog.id.toString();
+  };
+  const usersInDb = async () => {
+    const users = await User.find({})
+    return users.map(u => u.toJSON())
+  }
+  module.exports = {
+    blogs,
+    blogInDb,
+    nonExistingId,
+    usersInDb
+  };

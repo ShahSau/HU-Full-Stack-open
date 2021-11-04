@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Success from './components/Success';
+import ErrorMessage from './components/ErrorMessage'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,6 +11,7 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(null)
   const [title, setTitle]=  useState("");
   const [author, setAuthor]=  useState("");
   const [url, setUrl]=  useState("");
@@ -38,12 +41,17 @@ const App = () => {
   };
 
   const handleBlog = async (event) =>{
+    event.preventDefault();
     const newObj ={
       title: title,
       author: author,
       url:url
     }
     const blogNew = await blogService.create(newObj)
+    setSuccessMessage(`a new blog ${title} by ${author} is added`)
+    setTimeout(()=>{
+      setSuccessMessage(null)
+    },5000)
     setBlogs(blogs.concat(blogNew))
     setTitle('')
     setAuthor('')
@@ -124,12 +132,14 @@ const App = () => {
   if (user === null) {
     return (<div>
       <h2>Log in to the application</h2>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
       {loginForm()}
     </div>)
   }
   return (
     <div>
       <h2>blogs</h2>
+      <Success message={successMessage} />
       <p>{user.name} is logged in <button onClick={logout}> logout</button></p>
       <h2>create new blog</h2>
       {addBlogForm()}

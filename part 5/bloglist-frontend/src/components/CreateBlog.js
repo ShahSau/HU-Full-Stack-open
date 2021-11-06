@@ -40,7 +40,7 @@ const BlogFrom = ({
             onChange={handleUrlChange}
           />
         </div>
-        <button type="submit" onClick={toggleVisibility}>create</button>
+        <button type="submit" onChange={toggleVisibility}>create</button>
         
       </form>
     </div>

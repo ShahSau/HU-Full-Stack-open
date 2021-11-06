@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import Success from './components/Success';
-import ErrorMessage from './components/ErrorMessage'
-import BlogFrom from './components/CreateBlog'
-import LoginForm from './components/Login'
+import Success from "./components/Success";
+import ErrorMessage from "./components/ErrorMessage";
+import BlogFrom from "./components/CreateBlog";
 import Togglable from "./components/Togglable";
+import LoginForm from './components/Login'
+import Heading from './components/Heading'
+import AllBlogs from './components/AllBlog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -100,30 +102,7 @@ const loginForm = () => {
 
   }
 
-  const blogForm =()=>{
-    const hideWhenVisible = {display: blogVisible ? 'none' : ''}
-    const showWhenVisible = {display: blogVisible ? '' : 'none'}
-    return(
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setBlogVisible(true)}>Add Blog</button>
-        </div>
-        <div style={showWhenVisible}>
-        <BlogFrom 
-        addBlog = {addBlog}
-        title = {title}
-        author = {author}
-        url = {url}
-        handleTitleChange = {({ target })=> setTitle(target.value)}
-        handleAuthorChange = {({ target })=> setAuthor(target.value)}
-        handleUrlChange= {({ target })=> setUrl(target.value)}
-        toggleVisibility={toggleVisibility}
-        />
-        <button onClick={toggleVisibility}>cancel</button>
-        </div>
-      </div>
-    )
-  }
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -149,15 +128,25 @@ const loginForm = () => {
   }
   return (
     <div>
-      <h2>blogs</h2>
-      <Success message={successMessage} />
-        {user.name} is logged in <button onClick={logout}> logout</button>
-        {blogForm()}
-      
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-    </div>
+        <Heading 
+      successMessage={successMessage}
+      user={user}
+      logout={logout}
+      />
+       <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogFrom
+          addBlog={addBlog}
+          title={title}
+          author={author}
+          url={url}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+          toggleVisibility={toggleVisibility}
+        />
+      </Togglable>
+      <AllBlogs blogs={blogs}/>   
+       </div>
   );
 };
 

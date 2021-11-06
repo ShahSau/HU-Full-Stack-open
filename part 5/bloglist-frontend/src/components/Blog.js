@@ -1,7 +1,7 @@
 
 import React, { useState }  from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog,likeButton }) => {
   const [details, setDetails] = useState(false);
   const hideWhenPressed = {display : details ? "" : "none"}
   const showWhenPressed = { display: details ? "none" : "" };
@@ -24,7 +24,11 @@ const Blog = ({ blog }) => {
       <div style={hideWhenPressed}>
         <p>{blog.title} <button onClick={toggleVisibility}>hide</button></p>
         <p>URL: {blog.url}</p>
-        <p>No of likes:{blog.likes} <button>like</button></p>
+        <p> No of likes:{blog.likes}{" "}
+        <button value={blog.id} onClick={likeButton}>
+            like
+          </button>
+          </p>
         <p>Author: {blog.author}</p>
         
       </div>

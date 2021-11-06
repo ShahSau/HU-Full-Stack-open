@@ -115,6 +115,21 @@ const loginForm = () => {
     }
   }, []);
 
+  const likeButton = (event) => {
+    const id = event.target.value;
+    const already_blog = blogs.find((name) => name.id === id);
+    const new_Obj = { ...already_blog, likes: already_blog.likes + 1 };
+    console.log({already_blog})
+
+    blogService.update(already_blog.id, new_Obj).then((new_data) => {
+      setBlogs(
+        blogs.map((blog) => (blog.id !== already_blog.id ? blog : new_data))
+      );
+    });
+    console.log(already_blog.likes);
+  };
+
+
   if (user === null) {
     return (
       <div>
@@ -143,7 +158,7 @@ const loginForm = () => {
           toggleVisibility={toggleVisibility}
         />
       </Togglable>
-      <AllBlogs blogs={blogs}/>   
+      <AllBlogs blogs={blogs} likeButton={likeButton}/>   
        </div>
   );
 };

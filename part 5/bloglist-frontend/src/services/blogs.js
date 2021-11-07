@@ -23,6 +23,13 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const deleteBlog = (id)=>{
+  const configDelete = {
+    headers: {Authorization: token}
+  }
+  axios.delete(`${baseUrl}/${id}`, configDelete)
+  console.log(configDelete)
+}
 
 
-export default { getAll, create, update, setToken }
+export default { getAll, create, update, deleteBlog, setToken }

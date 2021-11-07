@@ -129,6 +129,25 @@ const loginForm = () => {
     console.log(already_blog.likes);
   };
 
+  const deleteButton = (event) =>{
+    const id = event.target.value;
+    const delete_blog = blogs.find((name) => name.id === id);
+    console.log(`coming from delete blog ${delete_blog.user}`)
+    console.log(user.username)
+    try {
+    if (window.confirm(`Remove blog ${delete_blog.title} by ${delete_blog.author}`)) {
+    blogService.deleteBlog(delete_blog.id)
+    let blogs2 = blogs.filter(blog=> blog.id !== delete_blog.id)
+    setBlogs(blogs2)
+    }
+    }catch (exception) {
+      setErrorMessage(`something went wrong while deleting ${delete_blog.title}`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  }
+
 
   if (user === null) {
     return (
@@ -158,7 +177,7 @@ const loginForm = () => {
           toggleVisibility={toggleVisibility}
         />
       </Togglable>
-      <AllBlogs blogs={blogs} likeButton={likeButton}/>   
+      <AllBlogs blogs={blogs} likeButton={likeButton} deleteButton={deleteButton}/>   
        </div>
   );
 };

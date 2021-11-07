@@ -1,9 +1,7 @@
-
-import React, { useState }  from 'react'
-
-const Blog = ({ blog,likeButton }) => {
+import React, { useState } from "react";
+const Blog = ({ blog, user, likeButton, deleteButton }) => {
   const [details, setDetails] = useState(false);
-  const hideWhenPressed = {display : details ? "" : "none"}
+  const hideWhenPressed = { display: details ? "" : "none" };
   const showWhenPressed = { display: details ? "none" : "" };
   const toggleVisibility = () => {
     setDetails(!details);
@@ -11,28 +9,41 @@ const Blog = ({ blog,likeButton }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  };
 
+    const loggedUser = JSON.parse(window.localStorage.getItem("loggedBlogAppUser"))
+    
+    console.log(loggedUser.username)
   return (
     <div style={blogStyle}>
       <div style={showWhenPressed}>
-        {blog.title} {blog.author} <button onClick={toggleVisibility}>View</button>
+        {blog.title} {blog.author}{" "}
+        <button onClick={toggleVisibility}>View</button>
       </div>
       <div style={hideWhenPressed}>
-        <p>{blog.title} <button onClick={toggleVisibility}>hide</button></p>
+        <p>
+          {blog.title} <button onClick={toggleVisibility}>hide</button>
+        </p>
         <p>URL: {blog.url}</p>
-        <p> No of likes:{blog.likes}{" "}
-        <button value={blog.id} onClick={likeButton}>
-            like
+        <p>
+          No of likes: {blog.likes}{" "}
+          <button value={blog.id} onClick={likeButton}>
+            like 
           </button>
-          </p>
+          
+        </p>
         <p>Author: {blog.author}</p>
-        
+        {loggedUser.username === blog.user.username   && 
+          <button value={blog.id} onClick={deleteButton}>
+            delete
+          </button>
+        }
       </div>
-  </div>
-)}
+    </div>
+  );
+};
 
-export default Blog
+export default Blog;

@@ -1,27 +1,26 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const Blog = ({ blog, likeButton, deleteButton }) => {
-  const [details, setDetails] = useState(false);
-  const hideWhenPressed = { display: details ? "" : "none" };
-  const showWhenPressed = { display: details ? "none" : "" };
+  const [details, setDetails] = useState(false)
+  const hideWhenPressed = { display: details ? '' : 'none' }
+  const showWhenPressed = { display: details ? 'none' : '' }
   const toggleVisibility = () => {
-    setDetails(!details);
-  };
+    setDetails(!details)
+  }
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
-    const loggedUser = JSON.parse(window.localStorage.getItem("loggedBlogAppUser"))
-    
+  const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
   return (
     <div style={blogStyle}>
       <div style={showWhenPressed}>
-        {blog.title} {blog.author}{" "}
+        {blog.title} {blog.author}{' '}
         <button onClick={toggleVisibility}>View</button>
       </div>
       <div style={hideWhenPressed}>
@@ -30,26 +29,25 @@ const Blog = ({ blog, likeButton, deleteButton }) => {
         </p>
         <p>URL: {blog.url}</p>
         <p>
-          No of likes: {blog.likes}{" "}
+          No of likes: {blog.likes}{' '}
           <button value={blog.id} onClick={likeButton}>
-            like 
+            like
           </button>
-          
         </p>
         <p>Author: {blog.author}</p>
-        {loggedUser.username === blog.user.username   && 
+        {loggedUser.username === blog.user.username   &&
           <button value={blog.id} onClick={deleteButton}>
             delete
           </button>
         }
       </div>
     </div>
-  );
-};
+  )
+}
 
 Blog.propTypes={
   blog: PropTypes.object.isRequired,
   likeButton:PropTypes.func.isRequired,
   deleteButton:PropTypes.func.isRequired,
 }
-export default Blog;
+export default Blog

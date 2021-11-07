@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const BlogFrom = ({
@@ -42,11 +42,10 @@ const BlogFrom = ({
           />
         </div>
         <button type="submit" onChange={toggleVisibility}>create</button>
-        
       </form>
     </div>
-  );
-};
+  )
+}
 
 BlogFrom.prototypes={
   addBlog: PropTypes.func.isRequired,
@@ -59,4 +58,4 @@ BlogFrom.prototypes={
   toggleVisibility:PropTypes.func.isRequired,
 }
 
-export default BlogFrom;
+export default BlogFrom

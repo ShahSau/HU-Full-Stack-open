@@ -1,6 +1,7 @@
 import React from "react";
 import Success from './Success'
-const heading = ({
+import PropTypes from 'prop-types'
+const Heading = ({
     successMessage,
     user,
     logout
@@ -14,5 +15,10 @@ const heading = ({
 </div>
     )}
 
+    Heading.prototype={
+        successMessage: PropTypes.string.isRequired,
+        user: PropTypes.object.isRequired,
+        logout:PropTypes.func.isRequired
+    }
 
-export default heading;
+export default Heading;

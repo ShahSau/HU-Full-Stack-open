@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-const Blog = ({ blog, user, likeButton, deleteButton }) => {
+import PropTypes from 'prop-types'
+
+const Blog = ({ blog, likeButton, deleteButton }) => {
   const [details, setDetails] = useState(false);
   const hideWhenPressed = { display: details ? "" : "none" };
   const showWhenPressed = { display: details ? "none" : "" };
@@ -16,7 +18,6 @@ const Blog = ({ blog, user, likeButton, deleteButton }) => {
 
     const loggedUser = JSON.parse(window.localStorage.getItem("loggedBlogAppUser"))
     
-    console.log(loggedUser.username)
   return (
     <div style={blogStyle}>
       <div style={showWhenPressed}>
@@ -46,4 +47,9 @@ const Blog = ({ blog, user, likeButton, deleteButton }) => {
   );
 };
 
+Blog.propTypes={
+  blog: PropTypes.object.isRequired,
+  likeButton:PropTypes.func.isRequired,
+  deleteButton:PropTypes.func.isRequired,
+}
 export default Blog;

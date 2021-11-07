@@ -1,7 +1,7 @@
 import React from "react";
 import Blog from "./Blog";
-
-const allBlogs = ({ blogs, likeButton, deleteButton }) => {
+import PropTypes from 'prop-types'
+const AllBlogs = ({ blogs, likeButton, deleteButton }) => {
   return (
     <div>
       {blogs
@@ -12,5 +12,10 @@ const allBlogs = ({ blogs, likeButton, deleteButton }) => {
     </div>
   );
 };
+AllBlogs.propTypes={
+  blogs: PropTypes.array.isRequired,
+  likeButton:PropTypes.func.isRequired,
+  deleteButton:PropTypes.func.isRequired,
+}
 
-export default allBlogs;
+export default AllBlogs;

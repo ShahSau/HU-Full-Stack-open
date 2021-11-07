@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 
 const BlogFrom = ({
   addBlog,
@@ -46,4 +47,16 @@ const BlogFrom = ({
     </div>
   );
 };
+
+BlogFrom.prototypes={
+  addBlog: PropTypes.func.isRequired,
+  title:PropTypes.string.isRequired,
+  author:PropTypes.string.isRequired,
+  url:PropTypes.string.isRequired,
+  handleTitleChange:PropTypes.func.isRequired,
+  handleAuthorChange:PropTypes.func.isRequired,
+  handleUrlChange:PropTypes.func.isRequired,
+  toggleVisibility:PropTypes.func.isRequired,
+}
+
 export default BlogFrom;

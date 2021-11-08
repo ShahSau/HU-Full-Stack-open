@@ -22,6 +22,8 @@ const App = () => {
   const [blogVisible, setBlogVisible] = useState(false)
   const [loginVisible, setLoginVisible] = useState(false)
 
+  /////////////////********************************** */
+  const blogFormRef = useRef()
   //creating logout button function
   // eslint-disable-next-line no-unused-vars
   const logout = (event) => {
@@ -48,6 +50,7 @@ const App = () => {
 
   //creating add blog button function
   const addBlog = async (event) => {
+    blogFormRef.current.toggleVisibility()
     event.preventDefault()
     const newObj ={
       title: title,
@@ -89,13 +92,12 @@ const App = () => {
     )
   }
 
-  const toggleVisibility = () => {
-    setBlogVisible(false)
-    setSuccessMessage(null)
+  // const toggleVisibility = () => {
+  //   setBlogVisible(false)
+  //   setSuccessMessage(null)
 
-  }
+  // }
 
-  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -168,7 +170,7 @@ const App = () => {
           handleTitleChange={({ target }) => setTitle(target.value)}
           handleAuthorChange={({ target }) => setAuthor(target.value)}
           handleUrlChange={({ target }) => setUrl(target.value)}
-          toggleVisibility={toggleVisibility}
+          // toggleVisibility={toggleVisibility}
         />
       </Togglable>
       <AllBlogs blogs={blogs} likeButton={likeButton} deleteButton={deleteButton}/>
